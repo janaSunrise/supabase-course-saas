@@ -15,6 +15,8 @@ CREATE TABLE profile (
 
     is_subscribed BOOLEAN NOT NULL DEFAULT FALSE,
     interval VARCHAR(255) NOT NULL,  -- monthly, yearly, etc.
+
+    stripe_customer VARCHAR(255),
 );
 
 -- Define a function - `create_profile_for_user`
