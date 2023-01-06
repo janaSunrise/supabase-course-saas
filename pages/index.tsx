@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { supabase } from '../lib/supabase';
+import { useUser } from '../context/user';
 
 import type { Lesson } from '../types';
 
@@ -9,6 +10,10 @@ interface Props {
 }
 
 const Home = ({ lessons }: Props) => {
+  const {user} = useUser();
+
+  console.log(user);
+
   return (
     <div className="w-full max-w-3xl mx-auto my-8 px-2">
       {lessons.map(lesson => (
