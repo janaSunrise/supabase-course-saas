@@ -10,6 +10,7 @@ CREATE TABLE profile (
     -- supabase has the authentication table. this can be customized/changed based
     -- on the custom implementation built, or another provider used.
     id UUID PRIMARY KEY REFERENCES auth.users (id),
+    email VARCHAR(255) NOT NULL,
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -24,7 +25,7 @@ CREATE TABLE profile (
 -- It will create a new profile for the user
 CREATE FUNCTION create_profile_for_user() RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public.profile (id) VALUES (NEW.id);
+    INSERT INTO public.profile (id, email) VALUES (NEW.id, NEW.email);
     RETURN NEW;
 END;
 

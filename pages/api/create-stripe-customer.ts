@@ -1,13 +1,12 @@
-import Stripe from 'stripe';
-
 import { supabase } from '../../lib/supabase';
+import { stripe } from '../../lib/stripe';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY! as string, {
-    apiVersion: '2022-11-15'
-  });
+  if (req.query.API_SECRET !== process.env.API_SECRET) {
+    return res.status(401).send('Unauthorized');
+  }
 
   const customer = await stripe.customers.create({
     email: req.body.email
@@ -20,7 +19,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
     .eq('id', req.body.user_id);
 
-  res.send({ message: `Customer created: ${customer.id}` });
+  res.send({
+    message: `Customer created: ${customer.id}. User ID: ${req.body.user_id}`
+  });
 };
 
 export default handler;
