@@ -1,13 +1,19 @@
-import {createContext, useContext, useState, useEffect} from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 import { supabase } from '../lib/supabase';
 
 import type { ReactNode } from 'react';
 import type { User } from '@supabase/supabase-js';
+import type { Profile } from '../types';
+
+interface UserAndProfile {
+  user: User | null;
+  profile: Profile | null;
+}
 
 const UserContext = createContext(
   {} as {
-    user: User | null;
+    user: UserAndProfile | null;
   }
 );
 
@@ -16,14 +22,25 @@ interface UserProviderProps {
 }
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserAndProfile | null>(null);
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         const user = session?.user ?? null;
 
-        setUser(user);
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profile')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+
+          setUser({
+            profile,
+            user
+          });
+        }
       }
     );
 
@@ -39,4 +56,4 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
 export const useUser = () => {
   return useContext(UserContext);
-}
+};
