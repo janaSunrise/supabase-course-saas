@@ -10,9 +10,9 @@ interface Props {
 }
 
 const Home = ({ lessons }: Props) => {
-  const {user} = useUser();
+  const { user } = useUser();
 
-  console.log(user);
+  console.log('user', user);
 
   return (
     <div className="w-full max-w-3xl mx-auto my-8 px-2">

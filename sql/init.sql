@@ -20,6 +20,15 @@ CREATE TABLE profile (
     stripe_customer VARCHAR(255),
 );
 
+CREATE TABLE premium_content (
+    -- ID foreign key to the lesson table
+    id INTEGER REFERENCES lesson (id),
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    video_url VARCHAR(255) NOT NULL,
+)
+
 -- Define a function - `create_profile_for_user`
 -- This function will be called when a new user is created
 -- It will create a new profile for the user

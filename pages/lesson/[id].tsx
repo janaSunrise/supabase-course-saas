@@ -1,3 +1,6 @@
+import { useState, useEffect } from 'react';
+import Video from 'react-player';
+
 import { supabase } from '../../lib/supabase';
 
 import type { GetServerSidePropsContext } from 'next';
@@ -8,6 +11,22 @@ interface Props {
 }
 
 const Lesson = ({ lesson }: Props) => {
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+
+  const getPremiumContent = async () => {
+    const { data: premiumContent } = await supabase
+      .from('premium_content')
+      .select('video_url')
+      .eq('id', lesson.id)
+      .single();
+
+    setVideoUrl(premiumContent?.video_url);
+  };
+
+  useEffect(() => {
+    getPremiumContent();
+  }, []);
+
   return (
     <div className="w-full max-w-3xl mx-auto py-8 px-8">
       <div className="block bg-white overflow-hidden my-4">
@@ -18,6 +37,19 @@ const Lesson = ({ lesson }: Props) => {
           <p className="text-gray-700 text-lg text-center">
             {lesson.description}
           </p>
+
+          <div className="mt-4">
+            {videoUrl ? (
+              <Video url={videoUrl} controls  />
+            ) : (
+              <div className="text-center">
+                <p className="text-gray-700 text-lg">
+                  This is a premium lesson. Please subscribe to access this
+                  content.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
