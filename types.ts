@@ -13,3 +13,11 @@ export interface Profile {
   interval: string;
   stripe_customer: string;
 }
+
+export interface StripeProduct {
+  id: string;
+  name: string;
+  price: number;
+  interval?: string;
+  currency: string;
+}
