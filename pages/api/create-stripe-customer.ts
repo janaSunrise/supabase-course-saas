@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase';
+import { getServiceSupabase } from '../../lib/supabase';
 import { stripe } from '../../lib/stripe';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -11,6 +11,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const customer = await stripe.customers.create({
     email: req.body.email
   });
+
+  const supabase = getServiceSupabase();
 
   await supabase
     .from('profile')
