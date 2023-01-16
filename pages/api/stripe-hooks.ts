@@ -34,7 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .from('profile')
         .update({
           is_subscribed: true,
-          interval: (event.data.object as any).items.data[0].plan.interval,
+          interval: (event.data.object as any).items.data[0].plan.interval
         })
         .eq('stripe_customer', (event.data.object as any).customer);
       break;

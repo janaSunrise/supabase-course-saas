@@ -6,6 +6,6 @@ export const supabase = createBrowserSupabaseClient();
 export const getServiceSupabase = () => {
   return createClient({
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    supabaseKey: process.env.SUPABASE_SERVICE_KEY!,
+    supabaseKey: process.env.SUPABASE_SERVICE_KEY!
   });
-}
+};

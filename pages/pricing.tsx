@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import axios from 'axios';
 
 import { stripe } from '../lib/stripe';
@@ -60,7 +61,7 @@ const Pricing = ({ plans }: PricingProps) => {
                 </button>
               )}
               {showManageSubscriptionButton && (
-                <button>Manage Subscription</button>
+                <Link href="/dashboard">Manage subscription</Link>
               )}
             </div>
           )}
