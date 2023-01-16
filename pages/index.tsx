@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import { supabase } from '../lib/supabase';
-import { useUser } from '../context/user';
 
 import type { Lesson } from '../types';
 
