@@ -1,9 +1,9 @@
-import '../styles/globals.css';
-
+import { UserProvider } from '../context/user';
 import Navbar from '../components/Navbar';
 
+import '../styles/globals.css';
+
 import type { AppProps } from 'next/app';
-import { UserProvider } from '../context/user';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

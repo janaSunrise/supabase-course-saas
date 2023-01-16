@@ -1,12 +1,17 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 import axios from 'axios';
 
 import { supabase } from '../lib/supabase';
 
 const Login = () => {
+  const router = useRouter();
+
   useEffect(() => {
-    supabase.auth.signInWithOAuth({ provider: 'github' });
+    supabase.auth.signInWithOAuth({
+      provider: 'github'
+    });
   }, []);
 
   return <div>Logging in</div>;

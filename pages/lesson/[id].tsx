@@ -40,7 +40,7 @@ const Lesson = ({ lesson }: Props) => {
 
           <div className="mt-4">
             {videoUrl ? (
-              <Video url={videoUrl} controls  />
+              <Video url={videoUrl} controls />
             ) : (
               <div className="text-center">
                 <p className="text-gray-700 text-lg">

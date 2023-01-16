@@ -11,11 +11,15 @@ interface UserAndProfile {
   profile: Profile | null;
 }
 
-const UserContext = createContext(
-  {} as {
-    user: UserAndProfile | null;
-  }
-);
+interface ContextProps {
+  user: UserAndProfile | null;
+  isLoading: boolean;
+}
+
+const UserContext = createContext({
+  user: null,
+  isLoading: true
+} as ContextProps);
 
 interface UserProviderProps {
   children: ReactNode;
@@ -23,6 +27,7 @@ interface UserProviderProps {
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<UserAndProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -40,6 +45,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
             profile,
             user
           });
+
+          setIsLoading(false);
         }
       }
     );
@@ -50,7 +57,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   });
 
   return (
-    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ user, isLoading }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 

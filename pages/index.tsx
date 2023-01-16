@@ -10,10 +10,6 @@ interface Props {
 }
 
 const Home = ({ lessons }: Props) => {
-  const { user } = useUser();
-
-  console.log('user', user);
-
   return (
     <div className="w-full max-w-3xl mx-auto my-8 px-2">
       {lessons.map(lesson => (

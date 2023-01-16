@@ -9,7 +9,7 @@ CREATE TABLE profile (
     -- `id` references the uuid `id` field in the `auth.users` table
     -- supabase has the authentication table. this can be customized/changed based
     -- on the custom implementation built, or another provider used.
-    id UUID PRIMARY KEY REFERENCES auth.users (id),
+    id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -18,6 +18,8 @@ CREATE TABLE profile (
     interval VARCHAR(255) NOT NULL,  -- monthly, yearly, etc.
 
     stripe_customer VARCHAR(255),
+
+    CONSTRAINT fk_profile_user FOREIGN KEY (id) REFERENCES auth.users (id)
 );
 
 CREATE TABLE premium_content (
@@ -33,12 +35,13 @@ CREATE TABLE premium_content (
 -- This function will be called when a new user is created
 -- It will create a new profile for the user
 CREATE FUNCTION create_profile_for_user() RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO public.profile (id, email) VALUES (NEW.id, NEW.email);
-    RETURN NEW;
-END;
+    BEGIN
+        INSERT INTO public.profile (id, email) VALUES (NEW.id, NEW.email);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
 
 -- Trigger that runs after a new user is created
 -- It will call the `create_profile_for_user` function
 CREATE TRIGGER create_profile_for_user AFTER INSERT ON auth.users
-    FOR EACH ROW EXECUTE PROCEDURE create_profile_for_user();
+    FOR EACH ROW EXECUTE FUNCTION create_profile_for_user();
