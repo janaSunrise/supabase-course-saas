@@ -28,13 +28,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const supabase = getServiceSupabase();
 
   switch (event.type) {
-    case 'customer.subscription.created':
-      console.log('triggered', (event.data.object as any).customer);
+    case 'customer.subscription.updated': // Catches both subscription creation and updates
       await supabase
         .from('profile')
         .update({
           is_subscribed: true,
           interval: (event.data.object as any).items.data[0].plan.interval
+        })
+        .eq('stripe_customer', (event.data.object as any).customer);
+      break;
+    case 'customer.subscription.deleted':
+      await supabase
+        .from('profile')
+        .update({
+          is_subscribed: false,
+          interval: null
         })
         .eq('stripe_customer', (event.data.object as any).customer);
       break;

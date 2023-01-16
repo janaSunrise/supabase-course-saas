@@ -56,6 +56,28 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     };
   });
 
+  useEffect(() => {
+    if (user) {
+      const channel = supabase
+        .channel(`public:profile`)
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'profile', filter: `id=eq.${user.user?.id}` },
+          payload => {
+            setUser({
+              ...user,
+              profile: payload.new as Profile
+            });
+          }
+        )
+        .subscribe();
+
+      return () => {
+        channel.unsubscribe();
+      }
+    }
+  }, [user]);
+
   return (
     <UserContext.Provider value={{ user, isLoading }}>
       {children}

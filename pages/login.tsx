@@ -25,13 +25,11 @@ export const getServerSideProps = async () => {
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'profile' },
       payload => {
-        console.log('Change received!', payload);
-
         // call the `/api/create-stripe-customer` route with the user's email, and `process.env.API_SECRET` as query
         // TODO: Fix URL to be universal
         axios
           .get(
-            `http://localhost:3000/api/create-stripe-customer?API_SECRET=${process.env.API_SECRET}`,
+            `${process.env.APP_URL}/api/create-stripe-customer?API_SECRET=${process.env.API_SECRET}`,
             {
               data: {
                 email: payload.new.email,
