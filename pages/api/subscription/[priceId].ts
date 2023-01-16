@@ -23,24 +23,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const stripeCustomer = data?.stripe_customer;
 
-  const {priceId} = req.query;
+  const { priceId } = req.query;
 
-  const lineItems = [{
-    price: priceId as string,
-    quantity: 1,
-  }];
+  const lineItems = [
+    {
+      price: priceId as string,
+      quantity: 1
+    }
+  ];
 
-  const session: Stripe.Checkout.Session = await stripe.checkout.sessions.create({
-    customer: stripeCustomer,
-    mode: 'subscription',
-    payment_method_types: ['card'],
-    line_items: lineItems,
-    success_url: `${process.env.APP_URL!}/payment/success`,
-    cancel_url: `${process.env.APP_URL!}/payment/cancelled`,
-  });
+  const session: Stripe.Checkout.Session =
+    await stripe.checkout.sessions.create({
+      customer: stripeCustomer,
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      success_url: `${process.env.APP_URL!}/payment/success`,
+      cancel_url: `${process.env.APP_URL!}/payment/cancelled`
+    });
 
   return res.send({
-    id: session.id,
+    id: session.id
   });
 };
 
